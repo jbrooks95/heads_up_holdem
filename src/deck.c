@@ -4,7 +4,6 @@
 
 // function prototypes
 void shuffle(card* A[], int n);
-void swap(card* A[], int i , int j);
 
 deck* create_deck()
 {
@@ -14,7 +13,7 @@ deck* create_deck()
     for(i = 0; i < 52; i++)
     {
         if(i > 13 * suit) suit++;
-        d->cards[i] = create_card((i%13)+1, suit);
+        d->cards[i] = create_card((i%13)+2, suit);
     }
     return d;
 }

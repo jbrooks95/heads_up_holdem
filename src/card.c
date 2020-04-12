@@ -4,7 +4,7 @@
 
 card* create_card(int value, int suit)
 {
-    if(value < 1 || value > 13)
+    if(value < 2 || value > 14)
     {
         return NULL;
     }
@@ -24,7 +24,7 @@ void print_card(card* c)
 {
     switch(c->value)
     {
-        case 1:
+        case 14:
             printf("value: A\n");
             break;
         case 13:

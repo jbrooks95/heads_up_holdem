@@ -16,4 +16,6 @@ void shuffle_deck(deck*);
 
 void print_deck(deck*);
 
+void swap(card* A[], int i, int j);
+
 #endif
