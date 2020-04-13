@@ -33,15 +33,14 @@ hand* find_best_hand(card* cards[])
             if(i == j) continue;
             int increment = 0; 
             hand* current_hand = malloc(sizeof(hand)); 
-            for(k=0; k < 5; k++)
+            for(k=0; k < 7; k++)
             {
-                if(increment == i || increment == j)
+                if(k == i || k == j)
                 {
                     increment++;
-                    k--;
                     continue;
                 }
-                current_hand->cards[k] = cards[k+increment];
+                current_hand->cards[k-increment] = cards[k];
             }
             if(compare_hands(current_hand, best_hand) == 1)
             {
@@ -156,7 +155,7 @@ int compare_for_high_card(hand* hand1, hand* hand2)
     for(i = 0; i < 5; i++)
     {
         result = compare_values(hand1->cards[i]->value, hand2->cards[i]->value);
-        if(!result) return result; //if result is non zero
+        if(result) return result; //if result is non zero
     }
     return result; //hands are the same
 }
