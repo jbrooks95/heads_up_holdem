@@ -102,8 +102,12 @@ int compare_hands(hand* hand1, hand* hand2)
     value2 = is_pair(hand2);
     if(value1 || value2)
     {
-        //compare kickers
-        return compare_for_high_card(hand1, hand2);
+        if(value1 == value2)
+        {
+            //compare kickers
+            return compare_for_high_card(hand1, hand2);
+        }
+        return compare_values(value1, value2);
     }
 
     //check for high card

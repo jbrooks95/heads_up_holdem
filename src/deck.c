@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <deck.h>
+#include <time.h>
 
 // function prototypes
 void shuffle(card* A[], int n);
@@ -39,7 +40,7 @@ void print_deck(deck* d)
 
 void shuffle_deck(deck* d)
 {
-	//srand(time(NULL));
+	srand(time(NULL));
     shuffle(d->cards, 52);
 }
 
