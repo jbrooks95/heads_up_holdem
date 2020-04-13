@@ -29,6 +29,22 @@ int main()
     print_hand(h1);
     printf("------\n");
     printf("compare hands: %d\n", compare_hands(h, h1));
+    printf("------\n");
+
+
+    shuffle_deck(d);
+
+    card* cards[7];
+    int i;
+    for(i = 0; i < 7; i++)
+    {
+        cards[i] = deal(d);
+        print_card(cards[i]);
+    }
+    printf("------\n");
+    printf("find best hand: \n");
+    hand* h3 = find_best_hand(cards);
+    print_hand(h3);
 
     return 0;  
 

@@ -16,7 +16,41 @@ int compare_for_high_card(hand* hand1, hand* hand2);
 
 hand* find_best_hand(card* cards[])
 {
-    return 0;
+    int i, j, k;
+    hand* best_hand = malloc(sizeof(hand));
+    //initialize best hand to be first 5 cards
+    for(i = 0; i < 5; i++)
+    {
+        best_hand->cards[i] = cards[i];
+    }
+    for(i = 0; i < 7; i++)
+    {
+        //i is the first number to be left out
+        for(j = 0; j < 7; j++)
+        {
+            //j is the second number to be left out
+            //j cannot be i
+            if(i == j) continue;
+            int increment = 0; 
+            hand* current_hand = malloc(sizeof(hand)); 
+            for(k=0; k < 5; k++)
+            {
+                if(increment == i || increment == j)
+                {
+                    increment++;
+                    k--;
+                    continue;
+                }
+                current_hand->cards[k] = cards[k+increment];
+            }
+            if(compare_hands(current_hand, best_hand) == 1)
+            {
+                *best_hand = *current_hand;
+            }
+            free(current_hand);
+        }
+    }
+    return best_hand;
 }
 
 //returns 1 if hand1 > hand2

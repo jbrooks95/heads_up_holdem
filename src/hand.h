@@ -7,7 +7,6 @@
 typedef struct hand
 {
     card* cards[5];
-    int rank;
 } hand;
 
 // function prototypes
