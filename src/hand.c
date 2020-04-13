@@ -5,9 +5,12 @@
 
 //function prototypes
 void sort_ascending(hand* hand);
+void sort_descending(hand* hand);
 int is_sorted_ascending(hand* hand);
+int is_sorted_descending(hand* hand);
 int compare_hand_values(int hand1_value, int hand2_value);
 int is_x_of_a_kind(hand* hand, int x);
+void print_hand(hand* hand);
 
 hand* find_best_hand(card* cards[])
 {
@@ -41,8 +44,8 @@ int compare_hands(hand* hand1, hand* hand2)
 int compare_hand_values(int hand1_value, int hand2_value)
 {
     if(hand1_value > hand2_value) return 1;
-    else if(hand1_value < hand2_value) return -1;
-    else return 0;
+    if(hand1_value < hand2_value) return -1;
+    return 0;
 }
 
 int is_x_of_a_kind(hand* hand, int x)
@@ -66,6 +69,23 @@ int is_pair(hand* hand)
     return is_x_of_a_kind(hand, 2);
 }
 
+int is_two_pair(hand* hand)
+{
+    sort_descending(hand);
+    print_hand(hand);
+    int first_pair = is_x_of_a_kind(hand, 2);
+    if(first_pair == 0) return 0;
+fprintf(stderr, "----\n");
+
+    sort_ascending(hand);
+    print_hand(hand);
+    int second_pair = is_x_of_a_kind(hand, 2);
+    if(first_pair == second_pair) return 0;
+    
+    if(first_pair > second_pair) return first_pair;
+    return second_pair;
+}
+
 //returns the value of the card that makes 3 of a kind
 int is_three_of_a_kind(hand* hand)
 {
@@ -84,7 +104,7 @@ int is_straight_flush(hand* hand)
     int flush_value = is_flush(hand);
     int straight_value = is_straight(hand);
     if(flush_value && straight_value) return straight_value;
-    else return 0;
+    return 0;
 }
 
 //returns value of highest card in flush
@@ -133,6 +153,21 @@ void sort_ascending(hand* hand)
             swap(hand->cards, i, i+1);
         }
     }
+    return sort_ascending(hand);
+}
+
+void sort_descending(hand* hand)
+{
+    if(is_sorted_descending(hand)) return;
+    int i;
+    for(i = 0; i < 4; i++)
+    {
+        if(hand->cards[i]->value < hand->cards[i+1]->value)
+        {
+            swap(hand->cards, i, i+1);
+        }
+    }
+    return sort_descending(hand);
 }
 
 int is_sorted_ascending(hand* hand)
@@ -145,3 +180,21 @@ int is_sorted_ascending(hand* hand)
     return 1;
 }
 
+int is_sorted_descending(hand* hand)
+{
+    int i;
+    for(i = 0; i < 4; i++)
+    {
+        if(hand->cards[i]->value < hand->cards[i+1]->value) return 0;
+    }
+    return 1;
+}
+
+void print_hand(hand* hand)
+{
+    int i;
+    for(i = 0; i < 5; i++)
+    {
+        print_card(hand->cards[i]);
+    }
+}
