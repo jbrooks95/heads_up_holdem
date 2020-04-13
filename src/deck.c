@@ -41,7 +41,6 @@ void print_deck(deck* d)
 void shuffle_deck(deck* d)
 {
     d->current_index = 0;
-	srand(time(NULL));
     shuffle(d->cards, 52);
 }
 

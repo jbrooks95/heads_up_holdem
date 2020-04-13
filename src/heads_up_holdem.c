@@ -5,12 +5,13 @@
 #include <hand.h>
 
 //function prototypes
-int get_post_flop_bet(hand* player_hand, int raise_multiplier);
+int get_post_flop_bet(card* player_cards[], hand* player_hand, int raise_multiplier);
 
 int ante = 5;
 
 int simulate(int starting_dollars, int number_of_hands)
 {
+    int number_of_hands_complete = 0;
     int odds = ante;
     int bet3x = ante * 3;
     int current_dollars = starting_dollars;
@@ -29,7 +30,11 @@ int simulate(int starting_dollars, int number_of_hands)
         bet = 0;
 
         //return if not enough money
-        if(current_dollars < (ante + odds + bet3x)) return current_dollars;
+        if(current_dollars < (ante + odds + bet3x)) 
+        {
+            printf("out of money\n");
+            return current_dollars;
+        }
 
         //deal pocket cards
         for(int j = 0; j < 2; j++)
@@ -106,7 +111,7 @@ int simulate(int starting_dollars, int number_of_hands)
         //check for post-flop raise if bet hasn't already been made
         if(bet == 0)
         {
-            bet = get_post_flop_bet(player_hand, 2);
+            bet = get_post_flop_bet(player_cards, player_hand, 2);
         }
         
         //deal turn and river
@@ -122,7 +127,7 @@ int simulate(int starting_dollars, int number_of_hands)
 
         if(bet == 0)
         {
-            bet = get_post_flop_bet(player_hand, 1);
+            bet = get_post_flop_bet(player_cards, player_hand, 1);
         }
         
         if(bet == 0) //fold hand
@@ -140,8 +145,6 @@ int simulate(int starting_dollars, int number_of_hands)
             int result = compare_hands(player_hand, dealer_hand);
             if(result == 1) //player wins
             {
-                current_dollars += (ante_payout + bet);
-
                 //check for odds payout
                 if(is_royal_flush(player_hand)) odds_multiplier = 500;
                 else if(is_straight_flush(player_hand)) odds_multiplier = 50;
@@ -150,7 +153,8 @@ int simulate(int starting_dollars, int number_of_hands)
                 else if(is_flush(player_hand)) odds_multiplier = 2; //actually pays 1.5, fix later
                 else if(is_straight(player_hand)) odds_multiplier = 1;
 
-                current_dollars += (odds * odds_multiplier);
+                int win = ((odds*odds_multiplier) + ante_payout + bet);
+                current_dollars += win;
             }
             else if(result == -1) //dealer wins
             {
@@ -167,8 +171,9 @@ int simulate(int starting_dollars, int number_of_hands)
 
             }
             //else push
+            number_of_hands_complete++;
         }
-fprintf(stderr, "current dollars: %d\n", current_dollars);
+        printf("current dollars: %d, # of hands: %d\n", current_dollars, i);
     }
     free(player_hand);
     free(dealer_hand);
@@ -176,7 +181,7 @@ fprintf(stderr, "current dollars: %d\n", current_dollars);
 }
 
 //return bet amount
-int get_post_flop_bet(hand* player_hand, int raise_multiplier)
+int get_post_flop_bet(card* player_cards[], hand* player_hand, int raise_multiplier)
 {
     int bet_amount = ante * raise_multiplier;
     //check for 2 pair or better
@@ -185,21 +190,24 @@ int get_post_flop_bet(hand* player_hand, int raise_multiplier)
         return bet_amount;
     }
     //check to four to a flush with 10 or better of that suit
-    else if(is_four_to_a_flush_with_ten_or_better(player_hand))
+    else if(is_four_to_a_flush_with_ten_or_better(player_hand) && raise_multiplier == 2)
     {
         return bet_amount;
     }
     else
     {
-        //check for hidden pair better than deuces
+        int number_of_cards = 5; //post flop value
+        if(raise_multiplier == 1) number_of_cards = 7; //post turn value
+        //check for hidden pair better (better than deuces if raise multiplier is 2x)
         for(int j = 0; j < 2; j++)
         {
             int k; 
-            int current_value = player_hand->cards[j]->value;
-            if(current_value == 2) continue;
-            for(k = j+1; k < 5; k++)
+            int current_value = player_cards[j]->value; //player_cards maintains original dealing order
+            if(current_value == 2 && raise_multiplier != 1) continue; //check for hidden pair better than deuces
+        
+            for(k = j+1; k < number_of_cards; k++)
             {
-                if(current_value == player_hand->cards[k]->value)
+                if(current_value == player_cards[k]->value)
                 {
                     return bet_amount;
                 }

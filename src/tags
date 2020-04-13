@@ -1,0 +1,38 @@
+Mtester	tester.c	/^int main()$/
+card	card.h	/^} card;$/
+compare_for_high_card	hand.c	/^int compare_for_high_card(hand* hand1, hand* hand2/
+compare_hands	hand.c	/^int compare_hands(hand* hand1, hand* hand2)$/
+compare_values	hand.c	/^int compare_values(int value1, int value2)$/
+create_card	card.c	/^card* create_card(int value, int suit)$/
+create_deck	deck.c	/^deck* create_deck()$/
+deal	deck.c	/^card* deal(deck* d)$/
+deck	deck.h	/^} deck;$/
+find_best_hand	hand.c	/^hand* find_best_hand(card* cards[])$/
+get_lower_pair_value_from_two_pair	hand.c	/^int get_lower_pair_value_from_two_pair(hand* hand,/
+get_pair_value_from_full_house	hand.c	/^int get_pair_value_from_full_house(hand* hand, int/
+get_post_flop_bet	heads_up_holdem.c	/^int get_post_flop_bet(hand* player_hand, int raise/
+hand	hand.h	/^} hand;$/
+is_flush	hand.c	/^int is_flush(hand* hand)$/
+is_four_of_a_kind	hand.c	/^int is_four_of_a_kind(hand* hand)$/
+is_four_to_a_flush_with_ten_or_better	hand.c	/^int is_four_to_a_flush_with_ten_or_better(hand* ha/
+is_full_house	hand.c	/^int is_full_house(hand* hand)$/
+is_pair	hand.c	/^int is_pair(hand* hand)$/
+is_pair_or_better	hand.c	/^int is_pair_or_better(hand* hand)$/
+is_royal_flush	hand.c	/^int is_royal_flush(hand* hand)$/
+is_sorted_ascending	hand.c	/^int is_sorted_ascending(hand* hand)$/
+is_sorted_descending	hand.c	/^int is_sorted_descending(hand* hand)$/
+is_straight	hand.c	/^int is_straight(hand* hand)$/
+is_straight_flush	hand.c	/^int is_straight_flush(hand* hand)$/
+is_three_of_a_kind	hand.c	/^int is_three_of_a_kind(hand* hand)$/
+is_two_pair	hand.c	/^int is_two_pair(hand* hand)$/
+is_two_pair_or_better	hand.c	/^int is_two_pair_or_better(hand* hand)$/
+is_x_of_a_kind	hand.c	/^int is_x_of_a_kind(hand* hand, int x)$/
+print_card	card.c	/^void print_card(card* c)$/
+print_deck	deck.c	/^void print_deck(deck* d)$/
+print_hand	hand.c	/^void print_hand(hand* hand)$/
+shuffle	deck.c	/^void shuffle(card* A[], int n)$/
+shuffle_deck	deck.c	/^void shuffle_deck(deck* d)$/
+simulate	heads_up_holdem.c	/^int simulate(int starting_dollars, int number_of_h/
+sort_ascending	hand.c	/^void sort_ascending(hand* hand)$/
+sort_descending	hand.c	/^void sort_descending(hand* hand)$/
+swap	deck.c	/^void swap(card* A[], int i, int j) {$/
