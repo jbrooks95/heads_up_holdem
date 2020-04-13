@@ -168,6 +168,66 @@ int compare_values(int value1, int value2)
     return 0;
 }
 
+int is_two_pair_or_better(hand* hand)
+{
+    if(is_straight_flush(hand) ||
+        is_four_of_a_kind(hand) ||
+        is_full_house(hand) ||
+        is_flush(hand) ||
+        is_straight(hand) ||
+        is_three_of_a_kind(hand) ||
+        is_two_pair(hand)) return 1;
+     return 0;
+}
+
+int is_royal_flush(hand* hand)
+{
+    if(is_straight_flush(hand))
+    {   
+        sort_descending(hand);
+        if(hand->cards[0]->value == 14) return 1;
+    }
+    return 0;
+}
+
+int is_pair_or_better(hand* hand)
+{
+    if(is_straight_flush(hand) ||
+        is_four_of_a_kind(hand) ||
+        is_full_house(hand) ||
+        is_flush(hand) ||
+        is_straight(hand) ||
+        is_three_of_a_kind(hand) ||
+        is_two_pair(hand) ||
+        is_pair(hand)) return 1;
+     return 0;
+}
+
+int is_four_to_a_flush_with_ten_or_better(hand* hand)
+{
+    int i, j, k;
+    //only have to check first 2 cards
+    for(i = 0; i < 2; i++)
+    {
+        int count = 1;
+        for(j = i+1; j < 5; j++)
+        {
+            if(hand->cards[i]->suit == hand->cards[j]->suit) count++;
+        }
+        if(count == 4)
+        {
+            //4 to a flush
+            //now check for 10 or better of that suit 
+            int suit = hand->cards[i]->suit; 
+            for(k = 0; k < 5; k++)
+            {
+                if(hand->cards[k]->value >= 10 && hand->cards[k]->suit == suit) return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 int is_x_of_a_kind(hand* hand, int x)
 {
     int i, j;

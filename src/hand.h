@@ -20,6 +20,10 @@ int is_straight(hand*);
 int is_three_of_a_kind(hand*);
 int is_two_pair(hand*);
 int is_pair(hand*);
+int is_four_to_a_flush_with_ten_or_better(hand*);
+int is_two_pair_or_better(hand*);
+int is_pair_or_better(hand*);
+int is_royal_flush(hand*);
 void print_hand(hand*);
 
 #endif

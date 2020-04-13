@@ -3,9 +3,15 @@
 #include <card.h>
 #include <deck.h>
 #include <hand.h>
+#include <heads_up_holdem.h>
 
 int main()
 {
+
+    simulate(20000, 20000);
+
+    return 0;
+
     deck* d = create_deck();
     shuffle_deck(d);
     //print_deck(d);
