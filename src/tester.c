@@ -12,7 +12,7 @@ int main()
     card* c2 = create_card(3, 2);
     card* c3 = create_card(3, 2);
     card* c4 = create_card(3, 2);
-    card* c5 = create_card(5, 2);
+    card* c5 = create_card(3, 2);
 
     hand* h = malloc(sizeof(hand));
     h->cards[0] = c1;

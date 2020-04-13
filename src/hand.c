@@ -7,6 +7,7 @@
 void sort_ascending(hand* hand);
 int is_sorted_ascending(hand* hand);
 int compare_hand_values(int hand1_value, int hand2_value);
+int is_x_of_a_kind(hand* hand, int x);
 
 hand* find_best_hand(card* cards[])
 {
@@ -44,28 +45,37 @@ int compare_hand_values(int hand1_value, int hand2_value)
     else return 0;
 }
 
+int is_x_of_a_kind(hand* hand, int x)
+{
+    int i, j;
+    //only have to check first (6 - x) cards
+    for(i = 0; i < (6-x); i++)
+    {
+        int count = 1;
+        for(j = i+1; j < 5; j++)
+        {
+            if(hand->cards[i]->value == hand->cards[j]->value) count++;
+        }
+        if(count == x) return hand->cards[i]->value;
+    }
+    return 0;
+}
+
+int is_pair(hand* hand)
+{
+    return is_x_of_a_kind(hand, 2);
+}
+
+//returns the value of the card that makes 3 of a kind
+int is_three_of_a_kind(hand* hand)
+{
+    return is_x_of_a_kind(hand, 3);
+}
+
+//returns the value of the card that makes 4 of a kind
 int is_four_of_a_kind(hand* hand)
 {
-    int first = hand->cards[0]->value;
-    int second = hand->cards[1]->value;
-    int i;
-    int count = 1;
-    for(i = 1; i < 5; i++)
-    {
-        if(hand->cards[i]->value == first) count++;
-    }
-
-    if(count == 4) return first;
-
-    count = 1;
-    for(i = 2; i < 5; i++)
-    {
-        if(hand->cards[i]->value == second) count++;
-    }
-
-    if(count == 4) return second;
-
-    return 0;
+    return is_x_of_a_kind(hand, 4);
 }
 
 //returns value of highest card in straight
