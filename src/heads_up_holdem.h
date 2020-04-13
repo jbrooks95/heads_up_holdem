@@ -2,6 +2,6 @@
 #define HOLDEM_H
 
 // function prototypes
-int simulate(int starting_dollars, int number_of_hands);
+int simulate(int starting_dollars, int number_of_hands, int print_info);
 
 #endif

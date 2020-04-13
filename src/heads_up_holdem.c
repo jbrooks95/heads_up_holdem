@@ -9,7 +9,7 @@ int get_post_flop_bet(card* player_cards[], hand* player_hand, int raise_multipl
 
 int ante = 5;
 
-int simulate(int starting_dollars, int number_of_hands)
+int simulate(int starting_dollars, int number_of_hands, int print_info)
 {
     int number_of_hands_complete = 0;
     int odds = ante;
@@ -32,7 +32,7 @@ int simulate(int starting_dollars, int number_of_hands)
         //return if not enough money
         if(current_dollars < (ante + odds + bet3x)) 
         {
-            printf("out of money\n");
+            if(print_info) printf("out of money\n");
             return current_dollars;
         }
 
@@ -173,7 +173,7 @@ int simulate(int starting_dollars, int number_of_hands)
             //else push
             number_of_hands_complete++;
         }
-        printf("current dollars: %d, # of hands: %d\n", current_dollars, i);
+        if(print_info) printf("current dollars: %d, # of hands: %d\n", current_dollars, i);
     }
     free(player_hand);
     free(dealer_hand);

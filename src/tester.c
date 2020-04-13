@@ -10,24 +10,18 @@ int main()
 {
     srand(time(NULL));
     int net_money = 0; 
+    int session_count = 10000;
+    int hands_per_session = 300;
+    int session_starting_money = 400;
+    
     int i;
-    for(i = 0; i < 100; i++)
+    for(i = 0; i < session_count; i++)
     {
-        net_money += (simulate(200, 240) - 200);
+        int session_change = simulate(session_starting_money, hands_per_session, 0) - session_starting_money;
+        printf("session change: %d\n", session_change);
+        net_money += session_change;
     }
     printf("net money: %d\n", net_money);
+    printf("average change per session: %d\n", net_money / session_count);
     return 0;
-
-
-    card* cards[7];
-    cards[0] = create_card(2, 3);
-    cards[1] = create_card(14, 2);
-    cards[2] = create_card(2, 1);
-    cards[3] = create_card(7, 4);
-    cards[4] = create_card(11, 2);
-    cards[5] = create_card(13, 2);
-    cards[6] = create_card(13, 4);
-    
-    hand* hand = find_best_hand(cards);
-    print_hand(hand);
 }
