@@ -9,10 +9,10 @@ int main()
     printf("hey\n");
 
     card* c1 = create_card(3, 2);
-    card* c2 = create_card(3, 2);
-    card* c3 = create_card(4, 2);
+    card* c2 = create_card(4, 2);
+    card* c3 = create_card(3, 2);
     card* c4 = create_card(4, 2);
-    card* c5 = create_card(3, 2);
+    card* c5 = create_card(4, 2);
 
     hand* h = malloc(sizeof(hand));
     h->cards[0] = c1;
@@ -23,10 +23,12 @@ int main()
 
     printf("is straight flush %d \n", is_straight_flush(h));
     printf("is four of a kind %d \n", is_four_of_a_kind(h));
-    printf("is three of a kind %d \n", is_three_of_a_kind(h));
-    printf("is two pair %d \n", is_two_pair(h));
+    printf("is full house %d \n", is_full_house(h));
     printf("is flush %d \n", is_flush(h));
     printf("is straight %d \n", is_straight(h));
+    printf("is three of a kind %d \n", is_three_of_a_kind(h));
+    printf("is two pair %d \n", is_two_pair(h));
+    printf("is pair %d \n", is_pair(h));
 
     free(h);
 

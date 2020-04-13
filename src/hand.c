@@ -11,6 +11,12 @@ int is_sorted_descending(hand* hand);
 int compare_hand_values(int hand1_value, int hand2_value);
 int is_x_of_a_kind(hand* hand, int x);
 void print_hand(hand* hand);
+int get_pair_value_from_full_house(hand* hand, int three_of_a_kind_value);
+int get_lower_pair_value_from_two_pair(hand* hand, int upper_value);
+int compare_kicker_on_four_of_a_kind(hand* hand1, hand* hand2, int four_of_a_kind_value);
+int compare_kicker_on_three_of_a_kind(hand* hand1, hand* hand2, int three_of_a_kind_value);
+int compare_kicker_on_two_pair(hand* hand1, hand* hand2, int pair1, int pair2);
+int compare_for_high_card(hand* hand1, hand* hand2);
 
 hand* find_best_hand(card* cards[])
 {
@@ -29,13 +35,177 @@ int compare_hands(hand* hand1, hand* hand2)
     if(value1 || value2) return compare_hand_values(value1, value2);
 
     //check for 4 of a kind
+    value1 = is_four_of_a_kind(hand1);
+    value2 = is_four_of_a_kind(hand2);
+    if(value1 == value2)
+    {
+        return compare_kicker_on_four_of_a_kind(hand1, hand2, value1);
+    }
+    return compare_hand_values(value1, value2);
+
     //check for full house
+    value1 = is_full_house(hand1);
+    value2 = is_full_house(hand2);
+    if(value1 || value2)
+    {
+        if(value1 == value2)
+        {
+            return compare_hand_values(get_pair_value_from_full_house(hand1, value1), get_pair_value_from_full_house(hand2, value2));
+        }
+        return compare_hand_values(value1, value2);
+    }
+
     //check for flush
+    value1 = is_flush(hand1);
+    value2 = is_flush(hand2);
+    if(value1 || value2) return compare_hand_values(value1, value2);
+
     //check for straight    
+    value1 = is_straight(hand1);
+    value2 = is_straight(hand2);
+    if(value1 || value2) return compare_hand_values(value1, value2);
+
     //check for 3 of a kind
+    value1 = is_three_of_a_kind(hand1);
+    value2 = is_three_of_a_kind(hand2);
+    if(value1 || value2)
+    {
+        if(value1 == value2)
+        {
+            return compare_kicker_on_three_of_a_kind(hand1, hand2, value1);
+        }
+        return compare_hand_values(value1, value2);
+    }
+
     //check for 2 pair
+    value1 = is_two_pair(hand1);
+    value2 = is_two_pair(hand2);
+    if(value1 || value2)
+    {
+        if(value1 == value2)
+        {
+            //get lower pair values
+            int lower1 = get_lower_pair_value_from_two_pair(hand1, value1);
+            int lower2 = get_lower_pair_value_from_two_pair(hand2, value2);
+            if(lower1 == lower2)
+            {
+                return compare_kicker_on_two_pair(hand1, hand2, value1, lower1);
+            }
+            return compare_hand_values(lower1, lower2);
+        }
+        return compare_hand_values(value1, value2);
+    }
+
     //check for pair
     //check for high card
+    return compare_for_high_card(hand1, hand2);
+}
+
+//assumes both hands are same 3 of a kind
+//returns the same as compare_hand_values
+int compare_kicker_on_three_of_a_kind(hand* hand1, hand* hand2, int three_of_a_kind_value)
+{
+    int i, kicker1, kicker2;
+    sort_descending(hand1);
+    sort_descending(hand2);
+    for(i = 0; i < 5; i++)
+    {
+        if(hand1->cards[i]->value != three_of_a_kind_value)
+        {
+            kicker1 = hand1->cards[i]->value;
+            break;
+        }
+    }
+    for(i = 0; i < 5; i++)
+    {
+        if(hand2->cards[i]->value != three_of_a_kind_value)
+        {
+            kicker2 = hand2->cards[i]->value;
+            break;
+        }
+    }
+    if(kicker1 == kicker2)
+    {
+        //check second kickers
+        for(i = 0; i < 5; i++)
+        {
+            if(hand1->cards[i]->value != three_of_a_kind_value && hand1->cards[i]->value != kicker1)
+            {
+                kicker1 = hand1->cards[i]->value;
+                break;
+            }
+        }
+        for(i = 0; i < 5; i++)
+        {
+            if(hand2->cards[i]->value != three_of_a_kind_value && hand2->cards[i]->value != kicker2)
+            {
+                kicker2 = hand2->cards[i]->value;
+                break;
+            }
+        }
+    }
+    return compare_hand_values(kicker1, kicker2);
+}
+
+int compare_for_high_card(hand* hand1, hand* hand2)
+{
+    sort_descending(hand1);
+    sort_descending(hand2);
+    int i, result;
+    for(i = 0; i < 5; i++)
+    {
+        result = compare_hand_values(hand1->cards[i]->value, hand2->cards[i]->value);
+        if(!result) return result; //if result is non zero
+    }
+    return result; //hands are the same
+}
+
+//assumes both hands are same two pair
+//returns the same as compare_hand_values
+int compare_kicker_on_two_pair(hand* hand1, hand* hand2, int pair1, int pair2)
+{
+    int i, kicker1, kicker2;
+    for(i = 0; i < 5; i++)
+    {
+        if(hand1->cards[i]->value != pair1 && hand1->cards[i]->value != pair2)
+        {
+            kicker1 = hand1->cards[i]->value;
+            break;
+        }
+    }
+    for(i = 0; i < 5; i++)
+    {
+        if(hand2->cards[i]->value != pair1 && hand2->cards[i]->value != pair2)
+        {
+            kicker2 = hand2->cards[i]->value;
+            break;
+        }
+    }
+    return compare_hand_values(kicker1, kicker2);
+}
+
+//assumes both hands are same 4 of a kind
+//returns the same as compare_hand_values
+int compare_kicker_on_four_of_a_kind(hand* hand1, hand* hand2, int four_of_a_kind_value)
+{
+    int i, kicker1, kicker2;
+    for(i = 0; i < 5; i++)
+    {
+        if(hand1->cards[i]->value != four_of_a_kind_value)
+        {
+            kicker1 = hand1->cards[i]->value;
+            break;
+        }
+    }
+    for(i = 0; i < 5; i++)
+    {
+        if(hand2->cards[i]->value != four_of_a_kind_value)
+        {
+            kicker2 = hand2->cards[i]->value;
+            break;
+        }
+    }
+    return compare_hand_values(kicker1, kicker2);
 }
 
 //return 1 if hand1 > hand2
@@ -64,21 +234,68 @@ int is_x_of_a_kind(hand* hand, int x)
     return 0;
 }
 
+//expects hand to be full house
+int get_pair_value_from_full_house(hand* hand, int three_of_a_kind_value)
+{
+    int i;
+    for(i = 0; i < 5; i++)
+    {
+        if(hand->cards[i]->value != three_of_a_kind_value) return hand->cards[i]->value;
+    }
+    return -1; //hand is not full house
+}
+
+//returns the three_of_a_kind value from full house
+int is_full_house(hand* hand)
+{
+    int three_of_a_kind = is_three_of_a_kind(hand);
+    if(!three_of_a_kind) return 0;
+
+    sort_descending(hand);
+    int pair = is_pair(hand);
+
+    if(pair == three_of_a_kind)
+    {
+        sort_ascending(hand);
+        pair = is_pair(hand);
+    }
+
+    if(pair == three_of_a_kind) return 0;
+    
+    return three_of_a_kind;
+}
+
 int is_pair(hand* hand)
 {
     return is_x_of_a_kind(hand, 2);
 }
 
+//expects hand to have two pair
+int get_lower_pair_value_from_two_pair(hand* hand, int upper_value)
+{
+    int i, j;
+    for(i = 0; i < 5; i++)
+    {
+        if(hand->cards[i]->value != upper_value)
+        {
+            int not_upper_value = hand->cards[i]->value;
+            for(j = i+1; j < 5; j++)
+            {
+                if(not_upper_value == hand->cards[j]->value) return not_upper_value;
+            }
+        }
+    }
+    return -1; //there was no second pair in hand
+}
+
+//returns higher value of two pair
 int is_two_pair(hand* hand)
 {
     sort_descending(hand);
-    print_hand(hand);
     int first_pair = is_x_of_a_kind(hand, 2);
     if(first_pair == 0) return 0;
-fprintf(stderr, "----\n");
 
     sort_ascending(hand);
-    print_hand(hand);
     int second_pair = is_x_of_a_kind(hand, 2);
     if(first_pair == second_pair) return 0;
     
