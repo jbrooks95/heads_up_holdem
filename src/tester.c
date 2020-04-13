@@ -9,7 +9,13 @@
 int main()
 {
     srand(time(NULL));
-    simulate(200, 100);
+    int net_money = 0; 
+    int i;
+    for(i = 0; i < 100; i++)
+    {
+        net_money += (simulate(200, 240) - 200);
+    }
+    printf("net money: %d\n", net_money);
     return 0;
 
 
