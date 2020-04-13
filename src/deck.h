@@ -5,6 +5,7 @@
 
 typedef struct deck
 {
+    int current_index;
     card* cards[52];
 } deck;
 
@@ -13,6 +14,8 @@ typedef struct deck
 deck* create_deck(void);
 
 void shuffle_deck(deck*);
+
+card* deal(deck*);
 
 void print_deck(deck*);
 

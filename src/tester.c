@@ -6,20 +6,32 @@
 
 int main()
 {
-    printf("hey\n");
-
-    card* c1 = create_card(3, 2);
-    card* c2 = create_card(4, 2);
-    card* c3 = create_card(3, 2);
-    card* c4 = create_card(4, 2);
-    card* c5 = create_card(4, 2);
+    deck* d = create_deck();
+    shuffle_deck(d);
+    //print_deck(d);
 
     hand* h = malloc(sizeof(hand));
-    h->cards[0] = c1;
-    h->cards[1] = c2;
-    h->cards[2] = c3;
-    h->cards[3] = c4;
-    h->cards[4] = c5;
+    h->cards[0] = deal(d);
+    h->cards[1] = deal(d);
+    h->cards[2] = deal(d);
+    h->cards[3] = deal(d);
+    h->cards[4] = deal(d);
+
+    hand* h1 = malloc(sizeof(hand));
+    h1->cards[0] = deal(d);
+    h1->cards[1] = deal(d);
+    h1->cards[2] = deal(d);
+    h1->cards[3] = deal(d);
+    h1->cards[4] = deal(d);
+
+    print_hand(h);
+    printf("------\n");
+    print_hand(h1);
+    printf("------\n");
+    printf("compare hands: %d\n", compare_hands(h, h1));
+
+    return 0;  
+
 
     printf("is straight flush %d \n", is_straight_flush(h));
     printf("is four of a kind %d \n", is_four_of_a_kind(h));
@@ -31,17 +43,5 @@ int main()
     printf("is pair %d \n", is_pair(h));
 
     free(h);
-
-    deck* d = create_deck();
-    //print_deck(d);
-
-    printf("hey\n");
-    printf("hey\n");
-    printf("hey\n");
-    printf("hey\n");
-    printf("hey\n");
-
-    shuffle_deck(d);
-   // print_deck(d);
 }
 

@@ -21,5 +21,6 @@ int is_straight(hand*);
 int is_three_of_a_kind(hand*);
 int is_two_pair(hand*);
 int is_pair(hand*);
+void print_hand(hand*);
 
 #endif

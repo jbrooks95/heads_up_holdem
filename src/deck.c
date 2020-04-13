@@ -18,6 +18,16 @@ deck* create_deck()
     return d;
 }
 
+card* deal(deck* d)
+{
+    if(d->current_index == 51)
+    {
+        shuffle_deck(d);
+        d->current_index = 0;
+    }
+    return d->cards[d->current_index++];
+}
+
 void print_deck(deck* d)
 {
     int i;

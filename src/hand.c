@@ -10,7 +10,6 @@ int is_sorted_ascending(hand* hand);
 int is_sorted_descending(hand* hand);
 int compare_values(int hand1_value, int hand2_value);
 int is_x_of_a_kind(hand* hand, int x);
-void print_hand(hand* hand);
 int get_pair_value_from_full_house(hand* hand, int three_of_a_kind_value);
 int get_lower_pair_value_from_two_pair(hand* hand, int upper_value);
 int compare_for_high_card(hand* hand1, hand* hand2);
@@ -34,12 +33,15 @@ int compare_hands(hand* hand1, hand* hand2)
     //check for 4 of a kind
     value1 = is_four_of_a_kind(hand1);
     value2 = is_four_of_a_kind(hand2);
-    if(value1 == value2)
+    if(value1 || value2)
     {
-        //check kickers
-        return compare_for_high_card(hand1, hand2);
+        if(value1 == value2)
+        {
+            //check kickers
+            return compare_for_high_card(hand1, hand2);
+        }
+        return compare_values(value1, value2);
     }
-    return compare_values(value1, value2);
 
     //check for full house
     value1 = is_full_house(hand1);
