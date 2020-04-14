@@ -6,8 +6,11 @@
 
 //function prototypes
 int get_post_flop_bet(card* player_cards[], hand* player_hand, int raise_multiplier);
+int get_trips_multiplier(hand* player_hand);
 
 int ante = 5;
+int trips = 0;
+int pocket_bonus = 0;
 
 int simulate(int starting_dollars, int number_of_hands, int print_info)
 {
@@ -23,11 +26,13 @@ int simulate(int starting_dollars, int number_of_hands, int print_info)
     card* player_cards[7];
     card* dealer_cards[7];
     
-    int i, j, bet;
+    int i, j, bet, trips_multiplier, pocket_bonus_multiplier;
     for(int i = 0; i < number_of_hands; i++)
     {
         shuffle_deck(d);
         bet = 0;
+        pocket_bonus_multiplier = 0;
+        trips_multiplier = 0;
 
         //return if not enough money
         if(current_dollars < (ante + odds + bet3x)) 
@@ -62,10 +67,33 @@ int simulate(int starting_dollars, int number_of_hands, int print_info)
 
         if(high_value == low_value && high_value > 2) //check for pair bigger than 2s
         {
-            bet = bet3x;
+            if(high_value == 14)
+            {
+                pocket_bonus_multiplier = 30; //pocket aces
+            }
+            else
+            {
+                pocket_bonus_multiplier = 5; //pocket pair
+            }
+
+            if(high_value > 2)
+            {
+                bet = bet3x;
+            }
         }
         else if(high_value == 14) //check for ace
         {
+            if(low_value == 13 || low_value == 12 || low_value == 11) //ace face
+            {
+                if(high_suit == low_suit) //ace face suited
+                {
+                    pocket_bonus_multiplier = 20;
+                }    
+                else
+                {
+                    pocket_bonus_multiplier = 10;
+                }
+            }
             bet = bet3x;
         }
         else if(high_value == 13) //check for king
@@ -130,9 +158,9 @@ int simulate(int starting_dollars, int number_of_hands, int print_info)
             bet = get_post_flop_bet(player_cards, player_hand, 1);
         }
         
-        if(bet == 0) //fold hand
+        if(bet == 0 && ante != 0) //fold hand
         {
-            current_dollars -= (ante + odds);
+            current_dollars -= (ante + odds + trips + pocket_bonus);
         }
         else
         {
@@ -168,16 +196,37 @@ int simulate(int starting_dollars, int number_of_hands, int print_info)
                 else if(is_straight(player_hand)) odds_multiplier = 5;
 
                 current_dollars += (odds * odds_multiplier);
-
             }
             //else push
-            number_of_hands_complete++;
+            trips_multiplier = get_trips_multiplier(player_hand);
+            current_dollars += (trips * trips_multiplier) + (pocket_bonus * pocket_bonus_multiplier);
+            if(trips_multiplier == 0)
+            {
+                current_dollars -= trips;
+            }
+            if(pocket_bonus_multiplier == 0)
+            {
+                current_dollars -= pocket_bonus;
+            }
         }
+        number_of_hands_complete++;
         if(print_info) printf("current dollars: %d, # of hands: %d\n", current_dollars, i);
     }
     free(player_hand);
     free(dealer_hand);
     return current_dollars;
+}
+
+int get_trips_multiplier(hand* player_hand)
+{
+    if(is_royal_flush(player_hand)) return 100;
+    if(is_straight_flush(player_hand)) return 40;
+    if(is_four_of_a_kind(player_hand)) return 30;
+    if(is_full_house(player_hand)) return 8;
+    if(is_flush(player_hand)) return 7;
+    if(is_straight(player_hand)) return 4;
+    if(is_three_of_a_kind(player_hand)) return 3;
+    return 0;
 }
 
 //return bet amount

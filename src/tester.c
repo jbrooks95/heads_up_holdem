@@ -10,8 +10,8 @@ int main()
 {
     srand(time(NULL));
     int net_money = 0; 
-    int session_count = 10000;
-    int hands_per_session = 300;
+    int session_count = 100;
+    int hands_per_session = 200;
     int session_starting_money = 400;
     
     int i;
